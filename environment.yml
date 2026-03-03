@@ -1,0 +1,20 @@
+name: retail-demand-modeling
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pandas
+  - numpy
+  - matplotlib
+  - seaborn
+  - scipy
+  - statsmodels
+  - scikit-learn
+  - xgboost
+  - jupyter
+  - notebook
+  - ipykernel
+  - pip
+  - pip:
+      - plotly

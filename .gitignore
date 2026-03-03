@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data artifacts and local datasets
+rossmann-store-sales/
+rossmann-store-sales.zip
+data/raw/*.csv
+data/processed/*.csv
+*.parquet
+*.feather
+*.pkl
+
+# Keep folder structure placeholders
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!reports/figures/.gitkeep
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
