@@ -86,6 +86,39 @@ Custom data locations:
 python3 main.py --raw-dir data/raw --processed-dir data/processed
 ```
 
+### main.py Pipeline Overview
+The `main.py` script orchestrates the complete end-to-end machine learning pipeline with 6 sequential stages:
+
+1. **Loading Raw Data** (`load_raw_data`)
+   - Loads train.csv, test.csv, and store.csv from the raw data directory
+   - Handles date parsing and data type conversions
+
+2. **Building Feature Tables** (`build_feature_tables`)
+   - Creates temporal features (Year, Month, Day, Week, Quarter, cyclical encodings)
+   - Adds lag features (Sales_lag_1, Sales_lag_7)
+   - Computes rolling statistics (Sales_roll7_mean, Sales_roll30_mean)
+   - Handles competition and promo2 features
+
+3. **Statistical Baseline** (`run_baseline_regression`)
+   - Robust OLS regression with HC3 heteroskedasticity-consistent standard errors
+   - Analyzes promo uplift effect using Welch t-test and Mann-Whitney U test
+   - Outputs coefficient table and statistical findings
+
+4. **Time-Series Baseline** (`fit_sarima_model`)
+   - Aggregates data to daily level
+   - Fits SARIMAX(1,1,1)(1,1,1,7) model with exogenous regressors
+   - Generates validation forecasts and calculates metrics
+
+5. **ML Model Training** (`train_models`)
+   - Splits data chronologically (85% train, 15% validation)
+   - Preprocesses features with median/mode imputation and one-hot encoding
+   - Trains Ridge and RandomForest regressors
+   - Selects best model based on RMSPE metric
+
+6. **Generating Predictions**
+   - Uses best model to generate test set predictions
+   - Creates Kaggle-compatible submission file
+
 ## Pipeline Outputs (`data/processed/`)
 - `train_features.csv`: engineered training table.
 - `test_features.csv`: engineered test table aligned to training schema.
