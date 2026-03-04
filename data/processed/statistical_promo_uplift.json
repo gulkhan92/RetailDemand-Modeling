@@ -1,0 +1,9 @@
+{
+  "mean_sales_promo_1": 8228.739730679934,
+  "mean_sales_promo_0": 5929.826183034807,
+  "mean_uplift": 2298.9135476451265,
+  "welch_t_stat": 356.6859122343584,
+  "welch_pvalue": 0.0,
+  "mannwhitney_u": 131101145045.5,
+  "mannwhitney_pvalue": 0.0
+}

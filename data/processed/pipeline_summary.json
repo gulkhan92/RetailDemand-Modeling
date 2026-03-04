@@ -1,0 +1,6 @@
+{
+  "validation_cutoff": "2015-03-16",
+  "best_model": "RandomForest",
+  "best_rmspe": 0.15634619630738458,
+  "output_dir": "data/processed"
+}

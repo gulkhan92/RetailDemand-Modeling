@@ -71,6 +71,13 @@ def build_feature_matrices(
     x_test["DateOrdinal"] = pd.to_datetime(x_test["Date"], errors="coerce").map(pd.Timestamp.toordinal)
     x_test.drop(columns=["Date"], inplace=True)
 
+    # Convert categorical columns to string to handle mixed types (e.g., StateHoliday has 0 and 'a','b','c')
+    cat_cols = x_train.select_dtypes(include=["object"]).columns.tolist()
+    for col in cat_cols:
+        x_train[col] = x_train[col].astype(str)
+        x_valid[col] = x_valid[col].astype(str)
+        x_test[col] = x_test[col].astype(str)
+
     return x_train, y_train, x_valid, y_valid, x_test, cutoff
 
 

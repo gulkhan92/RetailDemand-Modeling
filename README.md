@@ -10,6 +10,18 @@ This repository provides a full forecasting workflow from raw data ingestion to 
 
 Dataset source: [Rossmann Store Sales (Kaggle)](https://www.kaggle.com/competitions/rossmann-store-sales/overview)
 
+## Dataset Summary
+- **Training data:** ~844K sales records from 1,115 Rossmann stores (Germany)
+- **Test data:** ~41K records to predict
+- **Features:** Store ID, Day of Week, Promotions, State Holidays, School Holidays, Store Type, Assortment, Competition Distance, and temporal features
+- **Target:** Sales (number of transactions)
+
+### Key Statistical Findings
+- **Promo Uplift:** Sales with promo = 8,229 vs without promo = 5,930 (uplift of ~2,299, p < 0.001)
+- **Store Type Impact:** Store Type B has highest positive coefficient (+0.55), Type D has lowest (+0.007)
+- **Seasonality:** December shows highest positive seasonality effect (+0.26), while Sundays show significant negative impact (-0.25)
+- **Competition:** Higher competition distance has slight negative effect on sales
+
 ## Project Structure
 ```
 RetailDemand-Modeling/
@@ -90,16 +102,26 @@ python3 main.py --raw-dir data/raw --processed-dir data/processed
 ### Statistical baseline
 - Robust OLS (`HC3`) on `log1p(Sales)` with operational and calendar controls.
 - Promo effect testing via Welch t-test and Mann-Whitney U.
+- **Key findings:** Promotions have significant positive effect (+33% coefficient), with mean uplift of 2,299 in sales.
 
 ### Time-series baseline
 - Daily aggregate SARIMAX with exogenous regressors (`PromoRate`, `SchoolHolidayRate`, `AvgCustomers`).
-- Chronological validation split.
+- Chronological validation split (training until 2015-03-11).
+- **Metrics:** RMSE = 2,724,711, RMSPE = 8.25
 
 ### ML baseline
-- Feature-engineered tabular modeling.
+- Feature-engineered tabular modeling with 36 features including lag features and rolling statistics.
 - Preprocessing with median/mode imputation and one-hot encoding.
 - Baseline models: Ridge, RandomForest (optional XGBoost).
 - Selection metric: RMSPE.
+
+### Model Results (Validation)
+| Model | RMSE | MAE | RMSPE |
+|-------|------|-----|-------|
+| **RandomForest** | 1,120.68 | 759.91 | **0.156** |
+| Ridge | 2,115.48 | 1,435.94 | 0.272 |
+
+**Best Model:** RandomForest with RMSPE of 0.156
 
 ## Notebook Workflow
 1. `01_EDA_Rossmann.ipynb`: data quality, sales behavior, baseline figures.
