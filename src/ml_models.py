@@ -24,6 +24,9 @@ class ModelRunResult:
     errors: pd.DataFrame
 
 
+CAT_DTYPES = ["object", "string", "category"]
+
+
 def rmspe(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     """Root Mean Squared Percentage Error with zero-safe masking."""
     y_true = np.asarray(y_true)
@@ -71,8 +74,8 @@ def build_feature_matrices(
     x_test["DateOrdinal"] = pd.to_datetime(x_test["Date"], errors="coerce").map(pd.Timestamp.toordinal)
     x_test.drop(columns=["Date"], inplace=True)
 
-    # Convert categorical columns to string to handle mixed types (e.g., StateHoliday has 0 and 'a','b','c')
-    cat_cols = x_train.select_dtypes(include=["object"]).columns.tolist()
+    # Convert categorical columns to string to handle mixed types (e.g., StateHoliday has 0 and 'a','b','c').
+    cat_cols = x_train.select_dtypes(include=CAT_DTYPES).columns.tolist()
     for col in cat_cols:
         x_train[col] = x_train[col].astype(str)
         x_valid[col] = x_valid[col].astype(str)
@@ -83,7 +86,7 @@ def build_feature_matrices(
 
 def build_preprocessor(x_train: pd.DataFrame) -> ColumnTransformer:
     """Create preprocessing pipeline for numeric and categorical columns."""
-    cat_cols = x_train.select_dtypes(include=["object"]).columns.tolist()
+    cat_cols = x_train.select_dtypes(include=CAT_DTYPES).columns.tolist()
     num_cols = [c for c in x_train.columns if c not in cat_cols]
 
     return ColumnTransformer(

@@ -65,14 +65,15 @@ def main() -> None:
         enable_xgboost=not args.disable_xgboost,
     )
 
+    if not run.errors.empty:
+        save_processed(run.errors, processed_dir / "model_errors.csv")
+
     if run.leaderboard.empty:
         raise RuntimeError(
             "No ML models trained successfully. Inspect data/processed/model_errors.csv for details."
         )
 
     save_processed(run.leaderboard, processed_dir / "model_leaderboard.csv")
-    if not run.errors.empty:
-        save_processed(run.errors, processed_dir / "model_errors.csv")
 
     best_name = run.leaderboard.iloc[0]["model"]
     best_model = run.fitted_models[best_name]
