@@ -152,10 +152,11 @@ The `main.py` script orchestrates the complete end-to-end machine learning pipel
 ### Model Results (Validation)
 | Model | RMSE | MAE | RMSPE |
 |-------|------|-----|-------|
-| **RandomForest** | 1,120.68 | 759.91 | **0.156** |
+| **XGBoost** | 943.85 | 673.36 | **0.140** |
+| RandomForest | 1,120.68 | 759.91 | 0.156 |
 | Ridge | 2,115.48 | 1,435.94 | 0.272 |
 
-**Best Model:** RandomForest with RMSPE of 0.156
+**Best Model:** XGBoost with RMSPE of 0.140
 
 ## Notebook Workflow
 1. `01_EDA_Rossmann.ipynb`: data quality, sales behavior, baseline figures.
