@@ -76,9 +76,10 @@ Run baseline pipeline:
 python3 main.py
 ```
 
-Optional (enable XGBoost if installed):
+By default, `main.py` also trains an XGBoost model when `xgboost` is installed.
+To explicitly disable XGBoost:
 ```bash
-python3 main.py --enable-xgboost
+python3 main.py --disable-xgboost
 ```
 
 Custom data locations:
@@ -112,7 +113,7 @@ The `main.py` script orchestrates the complete end-to-end machine learning pipel
 5. **ML Model Training** (`train_models`)
    - Splits data chronologically (85% train, 15% validation)
    - Preprocesses features with median/mode imputation and one-hot encoding
-   - Trains Ridge and RandomForest regressors
+   - Trains Ridge, RandomForest, and XGBoost regressors (if dependency available)
    - Selects best model based on RMSPE metric
 
 6. **Generating Predictions**
@@ -145,7 +146,7 @@ The `main.py` script orchestrates the complete end-to-end machine learning pipel
 ### ML baseline
 - Feature-engineered tabular modeling with 36 features including lag features and rolling statistics.
 - Preprocessing with median/mode imputation and one-hot encoding.
-- Baseline models: Ridge, RandomForest (optional XGBoost).
+- Baseline models: Ridge, RandomForest, XGBoost.
 - Selection metric: RMSPE.
 
 ### Model Results (Validation)

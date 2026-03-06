@@ -17,7 +17,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run Rossmann end-to-end forecasting pipeline")
     parser.add_argument("--raw-dir", default="data/raw", help="Path to raw dataset folder")
     parser.add_argument("--processed-dir", default="data/processed", help="Path to output artifacts folder")
-    parser.add_argument("--enable-xgboost", action="store_true", help="Enable XGBoost model if installed")
+    parser.add_argument(
+        "--disable-xgboost",
+        action="store_true",
+        help="Disable XGBoost training (enabled by default if dependency is available)",
+    )
     return parser.parse_args()
 
 
@@ -58,7 +62,7 @@ def main() -> None:
         x_valid=x_valid,
         y_valid=y_valid,
         preprocessor=preprocessor,
-        enable_xgboost=args.enable_xgboost,
+        enable_xgboost=not args.disable_xgboost,
     )
 
     if run.leaderboard.empty:

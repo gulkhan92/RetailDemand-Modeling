@@ -109,7 +109,7 @@ def train_models(
     x_valid: pd.DataFrame,
     y_valid: pd.Series,
     preprocessor: ColumnTransformer,
-    enable_xgboost: bool = False,
+    enable_xgboost: bool = True,
 ) -> ModelRunResult:
     """Train baseline models and return leaderboard with failures."""
     models: dict[str, object] = {
@@ -122,6 +122,10 @@ def train_models(
             random_state=42,
         ),
     }
+
+    results: list[dict[str, float | str]] = []
+    model_errors: list[dict[str, str]] = []
+    fitted: dict[str, Pipeline] = {}
 
     if enable_xgboost:
         try:
@@ -138,11 +142,7 @@ def train_models(
                 n_jobs=-1,
             )
         except Exception as err:  # pragma: no cover - environment-dependent
-            pass
-
-    results: list[dict[str, float | str]] = []
-    model_errors: list[dict[str, str]] = []
-    fitted: dict[str, Pipeline] = {}
+            model_errors.append({"model": "XGBoost", "error": f"Dependency unavailable: {err}"})
 
     for name, model in models.items():
         try:
