@@ -41,6 +41,12 @@ def build_daily_series(train_df: pd.DataFrame) -> pd.DataFrame:
         .sort_values("Date")
         .set_index("Date")
     )
+    # Provide explicit daily frequency to avoid statsmodels date-frequency warnings.
+    daily = daily.asfreq("D")
+    daily["Sales"] = daily["Sales"].fillna(0)
+    for col in ("PromoRate", "SchoolHolidayRate", "AvgCustomers"):
+        if col in daily.columns:
+            daily[col] = daily[col].fillna(0)
     return daily
 
 

@@ -48,8 +48,10 @@ LAG_COLS = [
 def load_raw_data(raw_dir: str | Path = "data/raw") -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """Load train, test, and store files from raw directory."""
     raw_path = Path(raw_dir)
-    train = pd.read_csv(raw_path / "train.csv", parse_dates=["Date"])
-    test = pd.read_csv(raw_path / "test.csv", parse_dates=["Date"])
+    # StateHoliday has mixed representations (0 plus categorical labels), so force string dtype.
+    dtype_map = {"StateHoliday": "string"}
+    train = pd.read_csv(raw_path / "train.csv", parse_dates=["Date"], dtype=dtype_map, low_memory=False)
+    test = pd.read_csv(raw_path / "test.csv", parse_dates=["Date"], dtype=dtype_map, low_memory=False)
     store = pd.read_csv(raw_path / "store.csv")
     return train, test, store
 
